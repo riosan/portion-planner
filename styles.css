@@ -21,6 +21,7 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 16px;
 }
 
 button,
@@ -364,14 +365,67 @@ tbody tr:last-child td {
 }
 
 @media (max-width: 520px) {
+  body {
+    font-size: 18px;
+  }
+
+  .app-shell {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
   .topbar {
     align-items: stretch;
     flex-direction: column;
   }
 
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.35rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+  }
+
+  .panel {
+    padding: 14px;
+  }
+
+  label {
+    font-size: 1rem;
+  }
+
+  input,
+  select {
+    min-height: 50px;
+    padding: 11px 12px;
+    font-size: 1.08rem;
+  }
+
+  .primary-button,
+  .secondary-button,
+  .remove-button {
+    min-height: 46px;
+    font-size: 1.02rem;
+  }
+
+  .compact-button {
+    min-height: 42px;
+    font-size: 1rem;
+  }
+
   .language-switch {
     width: 100%;
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .language-button {
+    min-height: 44px;
+    font-size: 1.05rem;
   }
 
   .section-heading {
@@ -397,6 +451,26 @@ tbody tr:last-child td {
 
   .additive-summary-grid {
     grid-template-columns: 1fr;
+  }
+
+  .summary-grid span {
+    font-size: 0.95rem;
+  }
+
+  .summary-grid strong {
+    font-size: 1.45rem;
+  }
+
+  table {
+    min-width: 900px;
+  }
+
+  th {
+    font-size: 0.9rem;
+  }
+
+  td {
+    font-size: 1rem;
   }
 
   .history-row {
