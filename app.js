@@ -130,7 +130,7 @@ const translations = {
 const stateKey = "bakeryPortionPlannerState";
 const presetKey = "bakeryPortionPlannerPresets";
 const historyKey = "bakeryPortionPlannerHistory";
-const maxHistoryItems = 10;
+const maxHistoryItems = 50;
 
 const fields = [
   "productionStart",
