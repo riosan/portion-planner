@@ -444,8 +444,14 @@ function renderResults(results, bounds = shiftBounds()) {
   setSignedTotal(elements.totalWater, totals.waterLiters, "l");
   setSignedTotal(elements.totalSugar, totals.sugarKg, "kg");
   setSignedTotal(elements.totalFlour, totals.flourKg, "kg");
+
+  const last = results[results.length - 1];
+  const { kg: k, fatKg: f, waterLiters: w, sugarKg: s, flourKg: fl, isPartial } = last || {};
+
   elements.lastPortion.textContent = results.length
-    ? t(results[results.length - 1].isPartial ? "partial" : "full")
+    ? (isPartial
+      ? `${t("partial")} | ${t("weight")}: ${Number(k).toFixed(2)}kg | ${t("fat")}: ${Number(f).toFixed(2)}kg | ${t("water")}: ${Number(w).toFixed(2)}l | ${t("sugar")}: ${Number(s).toFixed(2)}kg | ${t("flour")}: ${Number(fl).toFixed(2)}kg`
+      : t("full"))
     : "-";
 
   if (!results.length) {

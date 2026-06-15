@@ -247,6 +247,11 @@ select:focus {
   margin-bottom: 14px;
 }
 
+#lastPortion {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
 .additive-summary-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
