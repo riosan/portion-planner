@@ -277,6 +277,11 @@ select:focus {
   border-radius: 8px;
 }
 
+
+tbody tr:nth-child(even) {
+  background-color: #f2f4f2;
+}
+
 table {
   width: 100%;
   min-width: 820px;
@@ -479,13 +484,9 @@ tbody tr:last-child td {
   }
 
   .schedule-start {
-    text-align: center;
+    text-align: right;
     white-space: nowrap;
     width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 44px;
   }
 
   .form-grid {
@@ -573,7 +574,7 @@ tbody tr:last-child td {
   th,
   td {
     padding: 8px 3px;
-    font-size: 0.82rem;
+    font-size: 17px;
     text-align: center;
   }
 
