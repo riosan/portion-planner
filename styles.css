@@ -367,7 +367,7 @@ tbody tr:last-child td {
 
 @media (max-width: 520px) {
   body {
-    font-size: 18px;
+    font-size: 19px;
   }
 
   .app-shell {
@@ -381,15 +381,15 @@ tbody tr:last-child td {
   }
 
   h1 {
-    font-size: 2rem;
+    font-size: 2.2rem;
   }
 
   h2 {
-    font-size: 1.35rem;
+    font-size: 1.5rem;
   }
 
   h3 {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
   }
 
   .panel {
@@ -397,26 +397,27 @@ tbody tr:last-child td {
   }
 
   label {
-    font-size: 1rem;
+    font-size: 1.05rem;
+    font-weight: 700;
   }
 
   input,
   select {
-    min-height: 50px;
+    min-height: 52px;
     padding: 11px 12px;
-    font-size: 1.08rem;
+    font-size: 1.15rem;
   }
 
   .primary-button,
   .secondary-button,
   .remove-button {
-    min-height: 46px;
-    font-size: 1.02rem;
+    min-height: 50px;
+    font-size: 1.1rem;
   }
 
   .compact-button {
-    min-height: 42px;
-    font-size: 1rem;
+    min-height: 44px;
+    font-size: 1.05rem;
   }
 
   .language-switch {
@@ -425,13 +426,21 @@ tbody tr:last-child td {
   }
 
   .language-button {
-    min-height: 44px;
-    font-size: 1.05rem;
+    min-height: 46px;
+    font-size: 1.1rem;
   }
 
-  .section-heading {
+  .section-heading,
+  .section-subheading {
     align-items: stretch;
     flex-direction: column;
+    gap: 12px;
+  }
+
+  .results-panel .section-heading {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
   }
 
   .primary-button,
@@ -440,45 +449,147 @@ tbody tr:last-child td {
   }
 
   .button-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
     width: 100%;
   }
 
-  .form-grid,
-  .compact-grid,
-  .preset-grid,
-  .break-row {
+  .controls-panel .section-heading .button-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    width: 100%;
+  }
+
+  .controls-panel .section-heading .button-group #calculateBtn {
+    grid-column: span 2;
+  }
+
+  .results-panel .section-heading .button-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .results-panel .section-heading .button-group #copyScheduleBtn {
+    width: 100%;
+  }
+
+  .schedule-start {
+    text-align: center;
+    white-space: nowrap;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+  }
+
+  .form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .form-grid label:nth-child(1),
+  .form-grid label:nth-child(2) {
+    grid-column: span 1;
+  }
+
+  .form-grid label:nth-child(3),
+  .form-grid label:nth-child(4) {
+    grid-column: span 1;
+  }
+
+  .form-grid label:nth-child(5) {
+    grid-column: span 2;
+  }
+
+  .preset-grid {
     grid-template-columns: 1fr;
   }
 
+  .compact-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .break-row {
+    grid-template-columns: 1fr 1fr 52px;
+    gap: 10px 12px;
+  }
+
+  .break-row label:nth-child(1) {
+    grid-column: span 3;
+  }
+
+  .break-row label:nth-child(2),
+  .break-row label:nth-child(3) {
+    grid-column: span 1;
+  }
+
+  .break-row .remove-button {
+    grid-column: span 1;
+    width: 52px;
+    height: 52px;
+    min-height: 52px;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .summary-grid,
   .additive-summary-grid {
-    grid-template-columns: 1fr;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .summary-grid div:nth-child(3) {
+    grid-column: span 2;
+  }
+
+  .additive-summary-grid div:nth-child(3),
+  .additive-summary-grid div:nth-child(4) {
+    grid-column: span 1;
   }
 
   .summary-grid span {
-    font-size: 0.95rem;
+    font-size: 1.05rem;
   }
 
   .summary-grid strong {
-    font-size: 1.45rem;
+    font-size: 1.6rem;
   }
 
   table {
-    min-width: 900px;
+    min-width: 100%;
+  }
+
+  th,
+  td {
+    padding: 8px 3px;
+    font-size: 0.82rem;
+    text-align: center;
   }
 
   th {
-    font-size: 0.9rem;
+    font-size: 0.72rem;
   }
 
-  td {
-    font-size: 1rem;
+  .partial-badge {
+    display: block;
+    margin-left: 0;
+    margin-top: 2px;
+    padding: 1px 4px;
+    font-size: 0.65rem;
   }
 
   .history-row {
     grid-template-columns: 1fr;
-  }
-
-  .remove-button {
-    width: 100%;
   }
 }
