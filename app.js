@@ -60,7 +60,9 @@ const translations = {
     noHistory: "No saved calculations yet",
     load: "Load",
     validationPortion: "Full portion time and weight must be greater than zero.",
-    validationBreak: "Some breaks are outside production time and were ignored."
+    validationBreak: "Some breaks are outside production time and were ignored.",
+    expandTable: "••• Click to expand all portions •••",
+    collapseTable: "▲ Collapse table ▲"
   },
   nl: {
     eyebrow: "Bakkerijproductie",
@@ -123,7 +125,9 @@ const translations = {
     noHistory: "Nog geen opgeslagen berekeningen",
     load: "Laden",
     validationPortion: "Tijd en gewicht van een volle portie moeten groter zijn dan nul.",
-    validationBreak: "Sommige pauzes liggen buiten productietijd en zijn genegeerd."
+    validationBreak: "Sommige pauzes liggen buiten productietijd en zijn genegeerd.",
+    expandTable: "••• Klik om alle porties uit te klappen •••",
+    collapseTable: "▲ Tabel inklappen ▲"
   }
 };
 
@@ -147,7 +151,7 @@ const fields = [
 const defaultFields = {
   productionStart: "05:20",
   productionEnd: "13:30",
-  portionMinutes: "30",
+  portionMinutes: "31",
   portionKg: "240",
   currentPortion: "1",
   fatKg: "0",
@@ -187,6 +191,7 @@ let historyItems = [];
 let lastResults = [];
 let lastWarnings = [];
 let lastSelectedPreset = "standard";
+let isTableCollapsed = true;
 
 const elements = {
   breakList: document.querySelector("#breakList"),
@@ -261,8 +266,8 @@ function setFormFields(values) {
 function cleanBreak(item, index = 0) {
   return {
     name: item.name || `${t("breakDefaultName")} ${index + 1}`,
-    start: item.start || "10:00",
-    end: item.end || "10:15"
+    start: item.start || "11:00",
+    end: item.end || "11:18"
   };
 }
 
@@ -350,6 +355,7 @@ function addWorkingMinutes(minutesToAdd, from, pauseList, productionEnd) {
 }
 
 function calculatePortions(options = {}) {
+  isTableCollapsed = true;
   const shouldRecordHistory = options.recordHistory === true;
   const bounds = shiftBounds();
   const fullPortionMinutes = numberValue("portionMinutes");
@@ -461,7 +467,17 @@ function renderResults(results, bounds = shiftBounds()) {
     return;
   }
 
-  for (const item of results) {
+  const totalRows = results.length;
+
+  for (let i = 0; i < totalRows; i++) {
+    const item = results[i];
+
+    if (isTableCollapsed && totalRows > 8) {
+      if (i >= 7 && i < totalRows - 1) {
+        continue;
+      }
+    }
+
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>
@@ -477,6 +493,34 @@ function renderResults(results, bounds = shiftBounds()) {
       <td>${signedValue(item.flourKg, "kg")}</td>
     `;
     elements.resultRows.append(row);
+
+    if (isTableCollapsed && totalRows > 8 && i === 6) {
+      const dotsRow = document.createElement("tr");
+      dotsRow.innerHTML = `
+        <td colspan="8" style="text-align: center; cursor: pointer; color: var(--muted); font-weight: bold; background: rgba(0,0,0,0.03); padding: 10px 0;">
+          ${t("expandTable")}
+        </td>
+      `;
+      dotsRow.addEventListener("click", () => {
+        isTableCollapsed = false;
+        renderResults(lastResults, bounds);
+      });
+      elements.resultRows.append(dotsRow);
+    }
+  }
+
+  if (!isTableCollapsed && totalRows > 8) {
+    const collapseRow = document.createElement("tr");
+    collapseRow.innerHTML = `
+      <td colspan="8" style="text-align: center; cursor: pointer; color: var(--primary); font-weight: bold; background: rgba(0,0,0,0.03); padding: 10px 0;">
+        ${t("collapseTable")}
+      </td>
+    `;
+    collapseRow.addEventListener("click", () => {
+      isTableCollapsed = true;
+      renderResults(lastResults, bounds);
+    });
+    elements.resultRows.append(collapseRow);
   }
 }
 
