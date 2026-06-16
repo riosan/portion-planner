@@ -593,7 +593,7 @@ function addBreak() {
   breaks.push({
     name: `${t("breakDefaultName")} ${breaks.length + 1}`,
     start: "10:00",
-    end: "10:15"
+    end: "10:18"
   });
   renderBreaks();
   calculatePortions();
