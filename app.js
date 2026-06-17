@@ -984,19 +984,25 @@ setLanguage(language);
 const scrollToTopBtn = document.querySelector("#scrollToTopBtn");
 
 if (scrollToTopBtn) {
-  window.addEventListener("scroll", () => {
-    if (window.scrollY > 300) {
+  const checkScroll = () => {
+    if (window.scrollY > 150) {
       scrollToTopBtn.classList.add("show");
     } else {
       scrollToTopBtn.classList.remove("show");
     }
-  });
+  };
 
+  window.addEventListener("scroll", checkScroll);
+  window.addEventListener("touchmove", checkScroll);
 
-  scrollToTopBtn.addEventListener("click", () => {
+  const doScrollTop = (e) => {
+    e.preventDefault();
     window.scrollTo({
       top: 0,
       behavior: "smooth"
     });
-  });
+  };
+
+  scrollToTopBtn.addEventListener("touchstart", doScrollTop, { passive: false });
+  scrollToTopBtn.addEventListener("click", doScrollTop);
 }

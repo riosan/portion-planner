@@ -602,13 +602,11 @@ tbody tr:last-child td {
 
 #scrollToTopBtn {
   position: fixed;
-  bottom: 32px;
-  /* Приподняли чуть выше от края экрана, чтобы убрать из зоны жестов телефона */
+  bottom: 40px;
   right: 24px;
   z-index: 999999 !important;
-  width: 50px;
-  /* Слегка увеличили размер для удобства тапа пальцем */
-  height: 50px;
+  width: 54px;
+  height: 54px;
   outline: none;
   border: 1px solid rgba(255, 255, 255, 0.6);
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.15));
@@ -617,12 +615,9 @@ tbody tr:last-child td {
   cursor: pointer;
   border-radius: 50%;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.4);
-
-  /* Идеальное выравнивание строго по центру */
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-
   -webkit-transform: translateZ(0);
   transform: translateY(10px) translateZ(0);
   opacity: 0;
@@ -633,8 +628,9 @@ tbody tr:last-child td {
 
 #scrollToTopBtn svg {
   display: block;
-  margin: 0;
-  padding: 0;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
   transition: transform 0.2s ease;
 }
 
