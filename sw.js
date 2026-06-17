@@ -1,4 +1,4 @@
-const cacheName = "portion-planner-v5";
+const cacheName = "portion-planner-v7";
 const appShell = [
   "./",
   "./index.html",
