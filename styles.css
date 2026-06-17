@@ -602,11 +602,13 @@ tbody tr:last-child td {
 
 #scrollToTopBtn {
   position: fixed;
-  bottom: 24px;
+  bottom: 32px;
+  /* Приподняли чуть выше от края экрана, чтобы убрать из зоны жестов телефона */
   right: 24px;
-  z-index: 9999;
-  width: 48px;
-  height: 48px;
+  z-index: 999999 !important;
+  width: 50px;
+  /* Слегка увеличили размер для удобства тапа пальцем */
+  height: 50px;
   outline: none;
   border: 1px solid rgba(255, 255, 255, 0.6);
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.15));
@@ -614,26 +616,32 @@ tbody tr:last-child td {
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   cursor: pointer;
   border-radius: 50%;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.4);
-  display: flex;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+
+  /* Идеальное выравнивание строго по центру */
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+
+  -webkit-transform: translateZ(0);
+  transform: translateY(10px) translateZ(0);
   opacity: 0;
   visibility: hidden;
-  transform: translateY(10px);
-  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s, background-color 0.2s;
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
   -webkit-tap-highlight-color: transparent;
 }
 
 #scrollToTopBtn svg {
   display: block;
+  margin: 0;
+  padding: 0;
   transition: transform 0.2s ease;
 }
 
 #scrollToTopBtn.show {
   opacity: 0.85;
   visibility: visible;
-  transform: translateY(0);
+  transform: translateY(0) translateZ(0);
 }
 
 #scrollToTopBtn:hover,
