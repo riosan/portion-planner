@@ -696,7 +696,7 @@ async function copySchedule() {
     }
   }
 }
-  
+
 function fallbackCopy(text) {
   const textarea = document.createElement("textarea");
   textarea.value = text;
@@ -978,3 +978,25 @@ loadState();
 renderPresets();
 elements.presetSelect.value = lastSelectedPreset;
 setLanguage(language);
+
+
+
+const scrollToTopBtn = document.querySelector("#scrollToTopBtn");
+
+if (scrollToTopBtn) {
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+      scrollToTopBtn.classList.add("show");
+    } else {
+      scrollToTopBtn.classList.remove("show");
+    }
+  });
+
+
+  scrollToTopBtn.addEventListener("click", () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  });
+}

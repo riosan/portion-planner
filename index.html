@@ -65,8 +65,10 @@
       <div class="section-subheading">
         <h3 data-i18n="presetsHeading">Presets</h3>
         <div class="button-group">
-          <button id="savePresetBtn" class="secondary-button compact-button" type="button" data-i18n="savePreset">Save preset</button>
-          <button id="deletePresetBtn" class="secondary-button compact-button danger-text" type="button" data-i18n="deletePreset">Delete preset</button>
+          <button id="savePresetBtn" class="secondary-button compact-button" type="button" data-i18n="savePreset">Save
+            preset</button>
+          <button id="deletePresetBtn" class="secondary-button compact-button danger-text" type="button"
+            data-i18n="deletePreset">Delete preset</button>
         </div>
       </div>
 
@@ -116,7 +118,8 @@
       <div class="section-heading">
         <h2 id="results-heading" data-i18n="resultsHeading">Result</h2>
         <div class="button-group">
-          <button id="copyScheduleBtn" class="secondary-button compact-button" type="button" data-i18n="copySchedule">Copy schedule</button>
+          <button id="copyScheduleBtn" class="secondary-button compact-button" type="button"
+            data-i18n="copySchedule">Copy schedule</button>
           <span id="scheduleStart" class="schedule-start"></span>
         </div>
       </div>
@@ -177,12 +180,20 @@
     <section class="panel" aria-labelledby="history-heading">
       <div class="section-heading">
         <h2 id="history-heading" data-i18n="historyHeading">History</h2>
-        <button id="clearHistoryBtn" class="secondary-button compact-button danger-text" type="button" data-i18n="clearHistory">Clear history</button>
+        <button id="clearHistoryBtn" class="secondary-button compact-button danger-text" type="button"
+          data-i18n="clearHistory">Clear history</button>
       </div>
       <div id="historyList" class="history-list"></div>
     </section>
   </main>
-
+  <button id="scrollToTopBtn" type="button" aria-label="Scroll to top" title="Scroll to top">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8e8e93"
+      stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 19 12 13 6 19"></polyline>
+      <polyline points="18 13 12 7 6 13"></polyline>
+      <polyline points="18 7 12 1 6 7"></polyline>
+    </svg>
+  </button>
   <script src="app.js"></script>
 </body>
 
