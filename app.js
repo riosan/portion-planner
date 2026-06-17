@@ -696,7 +696,7 @@ async function copySchedule() {
     }
   }
 }
-
+  
 function fallbackCopy(text) {
   const textarea = document.createElement("textarea");
   textarea.value = text;
