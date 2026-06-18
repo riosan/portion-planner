@@ -604,7 +604,7 @@ tbody tr:last-child td {
   position: fixed;
   bottom: 40px;
   right: 24px;
-  z-index: 999999 !important;
+  z-index: 99999999 !important;
   width: 54px;
   height: 54px;
   outline: none;
@@ -624,6 +624,17 @@ tbody tr:last-child td {
   visibility: hidden;
   transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
   -webkit-tap-highlight-color: transparent;
+}
+
+#scrollToTopBtn::before {
+  content: '';
+  position: absolute;
+  top: -18px;
+  left: -18px;
+  right: -18px;
+  bottom: -18px;
+  border-radius: 50%;
+  background: transparent;
 }
 
 #scrollToTopBtn svg {
