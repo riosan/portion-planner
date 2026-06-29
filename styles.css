@@ -402,27 +402,26 @@ tr:last-child td {
 
 @media (max-width: 520px) {
 
-  /* Выстраиваем строку брейка на мобилках в один ряд */
+
   .break-row {
     grid-template-columns: minmax(100px, 1.5fr) minmax(70px, 1fr) minmax(70px, 1fr) 44px;
     gap: 8px;
     align-items: flex-end;
   }
 
-  /* Сбрасываем жесткие растягивания по колонкам */
+
   .break-row label:nth-child(1),
   .break-row label:nth-child(2),
   .break-row label:nth-child(3) {
     grid-column: span 1 !important;
   }
 
-  /* Уменьшаем шрифты у подписей внутри брейков, чтобы они не переносились */
+
   .break-row label {
     font-size: 0.85rem;
     gap: 4px;
   }
 
-  /* Корректируем инпуты и кнопку удаления, чтобы они идеально совпадали по высоте */
   .break-row input {
     min-height: 44px;
     padding: 6px 8px;
