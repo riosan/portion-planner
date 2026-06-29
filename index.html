@@ -12,6 +12,59 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Styles for a neat authentication bar */
+    .auth-bar {
+      background: rgba(0, 0, 0, 0.04);
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 14px;
+      min-height: 48px;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .google-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #ffffff;
+      color: #3c4043;
+      border: 1px solid #dadce0;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-weight: 500;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.2s;
+    }
+
+    .google-btn:hover {
+      background: #f8f9fa;
+    }
+
+    .google-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .cloud-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+  </style>
 </head>
 
 <body>
@@ -27,89 +80,114 @@
       </div>
     </header>
 
+    <div id="authContainer" class="auth-bar">
+      <button type="button" id="authGoogleBtn" class="google-btn">
+        <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+            fill="#4285F4" />
+          <path
+            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+            fill="#34A853" />
+          <path
+            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+            fill="#FBBC05" />
+          <path
+            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+            fill="#EA4335" />
+        </svg>
+        <span>Sign in with Google</span>
+      </button>
+    </div>
+
     <section class="panel controls-panel" aria-labelledby="input-heading">
       <div class="section-heading">
         <h2 id="input-heading" data-i18n="inputHeading">Input</h2>
-        <div class="button-group">
-          <button id="nowBtn" class="secondary-button" type="button" data-i18n="now">Now</button>
-          <button id="clearAllBtn" class="secondary-button" type="button" data-i18n="clearAll">Clear all</button>
-          <button id="calculateBtn" class="primary-button" type="button" data-i18n="calculate">Calculate</button>
-        </div>
+        <button id="clearAllBtn" class="secondary-button compact-button danger-text" type="button"
+          data-i18n="clearAll">Clear all</button>
       </div>
-
-      <div id="errorMessage" class="error-message" role="alert" hidden></div>
 
       <div class="form-grid">
-        <label>
-          <span data-i18n="productionStart">Production start</span>
-          <input id="productionStart" type="time" value="05:20">
-        </label>
-        <label>
-          <span data-i18n="productionEnd">Production end</span>
-          <input id="productionEnd" type="time" value="13:30">
-        </label>
-        <label>
-          <span data-i18n="portionMinutes">Full portion time, min</span>
-          <input id="portionMinutes" type="number" min="0" step="1" value="30" inputmode="decimal">
-        </label>
-        <label>
-          <span data-i18n="portionKg">Full portion weight, kg</span>
-          <input id="portionKg" type="number" min="0" step="1" value="240" inputmode="decimal">
-        </label>
-        <label>
-          <span data-i18n="currentPortion">Current portion number</span>
-          <input id="currentPortion" type="number" min="1" step="1" value="1" inputmode="numeric">
-        </label>
-      </div>
+        <div class="form-row">
+          <label for="productionStart" data-i18n="productionStart">Production start</label>
+          <div class="input-with-button">
+            <input type="time" id="productionStart" value="05:20">
+            <button id="nowBtn" class="secondary-button" type="button" data-i18n="now">Now</button>
+          </div>
+        </div>
 
-      <div class="section-subheading">
-        <h3 data-i18n="presetsHeading">Presets</h3>
-        <div class="button-group">
-          <button id="savePresetBtn" class="secondary-button compact-button" type="button" data-i18n="savePreset">Save
-            preset</button>
-          <button id="deletePresetBtn" class="secondary-button compact-button danger-text" type="button"
-            data-i18n="deletePreset">Delete preset</button>
+        <div class="form-row">
+          <label for="productionEnd" data-i18n="productionEnd">Production end</label>
+          <input type="time" id="productionEnd" value="13:30">
+        </div>
+
+        <div class="form-row">
+          <label for="portionMinutes" data-i18n="portionMinutes">Full portion time, min</label>
+          <input type="text" id="portionMinutes" value="31" inputmode="decimal">
+        </div>
+
+        <div class="form-row">
+          <label for="portionKg" data-i18n="portionKg">Full portion weight, kg</label>
+          <input type="text" id="portionKg" value="240" inputmode="decimal">
+        </div>
+
+        <div class="form-row">
+          <label for="currentPortion" data-i18n="currentPortion">Current portion number</label>
+          <input type="text" id="currentPortion" value="1" inputmode="numeric">
         </div>
       </div>
 
-      <div class="form-grid preset-grid">
-        <label>
-          <span data-i18n="preset">Preset</span>
-          <select id="presetSelect"></select>
-        </label>
-      </div>
+      <div id="errorMessage" class="error-banner" hidden></div>
 
-      <div class="section-subheading">
-        <h3 data-i18n="additivesHeading">Additives per full portion</h3>
+      <button id="calculateBtn" class="primary-button action-button" type="button"
+        data-i18n="calculate">Calculate</button>
+    </section>
+
+    <section class="panel" aria-labelledby="presets-heading">
+      <div class="section-heading">
+        <h2 id="presets-heading" data-i18n="presetsHeading">Presets</h2>
+      </div>
+      <div class="preset-controls">
+        <div class="select-wrap">
+          <select id="presetSelect" aria-label="Select preset"></select>
+        </div>
+        <button id="savePresetBtn" class="secondary-button" type="button" data-i18n="savePreset">Save preset</button>
+        <button id="deletePresetBtn" class="secondary-button danger-text" type="button" data-i18n="deletePreset">Delete
+          preset</button>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="additives-heading">
+      <div class="section-heading">
+        <h2 id="additives-heading" data-i18n="additivesHeading">Additives per full portion</h2>
         <button id="resetAdditivesBtn" class="secondary-button compact-button" type="button"
           data-i18n="resetAdditives">Reset additives</button>
       </div>
-
-      <div class="form-grid compact-grid">
-        <label>
-          <span data-i18n="fatKg">Fat, kg</span>
-          <input id="fatKg" type="text" value="0" inputmode="text" pattern="-?[0-9]*[.,]?[0-9]*" autocomplete="off">
-        </label>
-        <label>
-          <span data-i18n="waterLiters">Water, l</span>
-          <input id="waterLiters" type="text" value="0" inputmode="text" pattern="-?[0-9]*[.,]?[0-9]*"
-            autocomplete="off">
-        </label>
-        <label>
-          <span data-i18n="sugarKg">Sugar, kg</span>
-          <input id="sugarKg" type="text" value="0" inputmode="text" pattern="-?[0-9]*[.,]?[0-9]*" autocomplete="off">
-        </label>
-        <label>
-          <span data-i18n="flourKg">Flour, kg</span>
-          <input id="flourKg" type="text" value="0" inputmode="text" pattern="-?[0-9]*[.,]?[0-9]*" autocomplete="off">
-        </label>
+      <div class="form-grid">
+        <div class="form-row">
+          <label for="fatKg" data-i18n="fatKg">Fat, kg</label>
+          <input type="text" id="fatKg" value="0" inputmode="decimal">
+        </div>
+        <div class="form-row">
+          <label for="waterLiters" data-i18n="waterLiters">Water, l</label>
+          <input type="text" id="waterLiters" value="0" inputmode="decimal">
+        </div>
+        <div class="form-row">
+          <label for="sugarKg" data-i18n="sugarKg">Sugar, kg</label>
+          <input type="text" id="sugarKg" value="0" inputmode="decimal">
+        </div>
+        <div class="form-row">
+          <label for="flourKg" data-i18n="flourKg">Flour, kg</label>
+          <input type="text" id="flourKg" value="0" inputmode="decimal">
+        </div>
       </div>
     </section>
 
     <section class="panel" aria-labelledby="breaks-heading">
       <div class="section-heading">
         <h2 id="breaks-heading" data-i18n="breaksHeading">Breaks</h2>
-        <button id="addBreakBtn" class="secondary-button" type="button" data-i18n="addBreak">Add break</button>
+        <button id="addBreakBtn" class="secondary-button compact-button" type="button" data-i18n="addBreak">Add
+          break</button>
       </div>
       <div id="breakList" class="break-list"></div>
     </section>
@@ -117,44 +195,22 @@
     <section class="panel results-panel" aria-labelledby="results-heading">
       <div class="section-heading">
         <h2 id="results-heading" data-i18n="resultsHeading">Result</h2>
-        <div class="button-group">
-          <button id="copyScheduleBtn" class="secondary-button compact-button" type="button"
-            data-i18n="copySchedule">Copy schedule</button>
-          <span id="scheduleStart" class="schedule-start"></span>
-        </div>
+        <button id="copyScheduleBtn" class="secondary-button compact-button" type="button" data-i18n="copySchedule">Copy
+          schedule</button>
       </div>
 
-      <div class="summary-grid">
-        <div>
-          <span data-i18n="totalPortions">Total portions</span>
-          <strong id="totalPortions">0</strong>
+      <div class="summary-box">
+        <div id="scheduleStart" class="summary-title">Product start: --:--</div>
+        <div class="summary-grid">
+          <div><span data-i18n="totalPortions">Total portions</span>: <strong id="totalPortions">0</strong></div>
+          <div><span data-i18n="totalWeight">Total weight</span>: <strong id="totalWeight">0 kg</strong></div>
+          <div><span data-i18n="totalFat">Total fat</span>: <strong id="totalFat">0 kg</strong></div>
+          <div><span data-i18n="totalWater">Total water</span>: <strong id="totalWater">0 l</strong></div>
+          <div><span data-i18n="totalSugar">Total sugar</span>: <strong id="totalSugar">0 kg</strong></div>
+          <div><span data-i18n="totalFlour">Total flour</span>: <strong id="totalFlour">0 kg</strong></div>
         </div>
-        <div>
-          <span data-i18n="totalWeight">Total weight</span>
-          <strong id="totalWeight">0 kg</strong>
-        </div>
-        <div>
-          <span data-i18n="lastPortion">Last portion</span>
-          <strong id="lastPortion">-</strong>
-        </div>
-      </div>
-
-      <div class="summary-grid additive-summary-grid">
-        <div>
-          <span data-i18n="totalFat">Total fat</span>
-          <strong id="totalFat">0 kg</strong>
-        </div>
-        <div>
-          <span data-i18n="totalWater">Total water</span>
-          <strong id="totalWater">0 l</strong>
-        </div>
-        <div>
-          <span data-i18n="totalSugar">Total sugar</span>
-          <strong id="totalSugar">0 kg</strong>
-        </div>
-        <div>
-          <span data-i18n="totalFlour">Total flour</span>
-          <strong id="totalFlour">0 kg</strong>
+        <div class="summary-footer">
+          <span data-i18n="lastPortion">Last portion</span>: <span id="lastPortion">-</span>
         </div>
       </div>
 
@@ -186,14 +242,15 @@
       <div id="historyList" class="history-list"></div>
     </section>
   </main>
+
   <button id="scrollToTopBtn" type="button" aria-label="Scroll to top" title="Scroll to top">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#777777"
       stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="18 19 12 13 6 19"></polyline>
-      <polyline points="18 13 12 7 6 13"></polyline>
-      <polyline points="18 7 12 1 6 7"></polyline>
+      <polyline points="18 15 12 9 6 15"></polyline>
     </svg>
   </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js"></script>
 </body>
 
