@@ -1078,10 +1078,25 @@ elements.historyList.addEventListener("click", (event) => {
   loadHistoryItem(button.dataset.historyId);
 });
 
-// PWA Service Worker Registration
+// PWA Service Worker Registration with auto-update
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("sw.js");
+    navigator.serviceWorker.register("sw.js").then((reg) => {
+      // Check for updates manually on page load
+      reg.update();
+
+      // If a new service worker is found and activated, reload the page
+      reg.addEventListener("updatefound", () => {
+        const newWorker = reg.installing;
+        if (newWorker) {
+          newWorker.addEventListener("statechange", () => {
+            if (newWorker.state === "activated") {
+              window.location.reload();
+            }
+          });
+        }
+      });
+    });
   });
 }
 

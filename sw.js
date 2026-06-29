@@ -1,4 +1,4 @@
-const cacheName = "portion-planner-v1.2";
+const cacheName = "portion-planner-v1.3";
 const appShell = [
   "./",
   "./index.html",
@@ -34,4 +34,14 @@ self.addEventListener("fetch", (event) => {
       return cached || fetch(event.request);
     })
   );
+});
+
+// Force the waiting service worker to become the active service worker
+self.addEventListener('install', (event) => {
+  self.skipWaiting();
+});
+
+// Claim control of any open clients immediately
+self.addEventListener('activate', (event) => {
+  event.waitUntil(clients.claim());
 });
