@@ -401,75 +401,45 @@ tr:last-child td {
 }
 
 @media (max-width: 520px) {
-  .app-shell {
-    padding: max(12px, env(safe-area-inset-top)) 10px max(16px, env(safe-area-inset-bottom));
-  }
 
-  .panel {
-    padding: 16px;
-    border-radius: 12px;
-    margin-bottom: 14px;
-  }
-
-  .preset-controls {
-    flex-wrap: wrap;
-  }
-
-  .preset-controls .select-wrap {
-    width: 100%;
-    flex: none;
-  }
-
-  .preset-controls button {
-    flex: 1;
-  }
-
-  .form-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
-
-  .form-grid .form-row:nth-child(1),
-  .form-grid .form-row:nth-child(2) {
-    grid-column: span 1;
-  }
-
-  .form-grid .form-row:nth-child(3),
-  .form-grid .form-row:nth-child(4) {
-    grid-column: span 1;
-  }
-
-  .controls-panel .form-grid .form-row:nth-child(1) {
-    grid-column: span 2;
-  }
-
-  .controls-panel .form-grid .form-row:nth-child(2),
-  .controls-panel .form-grid .form-row:nth-child(3) {
-    grid-column: span 1;
-  }
-
-  .controls-panel .form-grid .form-row:nth-child(4),
-  .controls-panel .form-grid .form-row:nth-child(5) {
-    grid-column: span 1;
-  }
-
-  .break-entry {
-    flex-wrap: wrap;
+  /* Выстраиваем строку брейка на мобилках в один ряд */
+  .break-row {
+    grid-template-columns: minmax(100px, 1.5fr) minmax(70px, 1fr) minmax(70px, 1fr) 44px;
     gap: 8px;
+    align-items: flex-end;
   }
 
-  .break-entry input[type="time"] {
-    flex: 1;
-    min-width: 70px;
+  /* Сбрасываем жесткие растягивания по колонкам */
+  .break-row label:nth-child(1),
+  .break-row label:nth-child(2),
+  .break-row label:nth-child(3) {
+    grid-column: span 1 !important;
   }
 
-  .break-entry input[type="text"] {
-    flex: 1;
-    min-width: 60px;
+  /* Уменьшаем шрифты у подписей внутри брейков, чтобы они не переносились */
+  .break-row label {
+    font-size: 0.85rem;
+    gap: 4px;
   }
 
-  .break-entry button {
-    width: 100%;
+  /* Корректируем инпуты и кнопку удаления, чтобы они идеально совпадали по высоте */
+  .break-row input {
+    min-height: 44px;
+    padding: 6px 8px;
+    font-size: 1rem;
+  }
+
+  .break-row .remove-button {
+    grid-column: span 1 !important;
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
   }
 }
 
