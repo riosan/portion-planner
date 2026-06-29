@@ -166,19 +166,20 @@
       <div class="form-grid">
         <div class="form-row">
           <label for="fatKg" data-i18n="fatKg">Fat, kg</label>
-          <input type="text" id="fatKg" value="0" inputmode="decimal">
+          <input type="text" id="fatKg" value="0" inputmode="text" pattern="-?[0-9]*[.,]?[0-9]*" autocomplete="off">
         </div>
         <div class="form-row">
           <label for="waterLiters" data-i18n="waterLiters">Water, l</label>
-          <input type="text" id="waterLiters" value="0" inputmode="decimal">
+          <input type="text" id="waterLiters" value="0" inputmode="text" pattern="-?[0-9]*[.,]?[0-9]*"
+            autocomplete="off">
         </div>
         <div class="form-row">
           <label for="sugarKg" data-i18n="sugarKg">Sugar, kg</label>
-          <input type="text" id="sugarKg" value="0" inputmode="decimal">
+          <input type="text" id="sugarKg" value="0" inputmode="text" pattern="-?[0-9]*[.,]?[0-9]*" autocomplete="off">
         </div>
         <div class="form-row">
           <label for="flourKg" data-i18n="flourKg">Flour, kg</label>
-          <input type="text" id="flourKg" value="0" inputmode="decimal">
+          <input type="text" id="flourKg" value="0" inputmode="text" pattern="-?[0-9]*[.,]?[0-9]*" autocomplete="off">
         </div>
       </div>
     </section>
