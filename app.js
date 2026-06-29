@@ -673,7 +673,7 @@ function savePreset() {
 
 function deletePreset() {
   const id = elements.presetSelect.value;
-  const preset = allPresets().find((item) => item.id !== id);
+  const preset = allPresets().find((item) => item.id === id);
 
   if (!preset || preset.builtIn) {
     showWarnings([t("cannotDeletePreset")]);
