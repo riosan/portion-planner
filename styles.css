@@ -707,7 +707,6 @@ tbody tr:last-child td {
 .google-btn:hover {
   background-color: #f8f9fa;
   border-color: #d2e3fc;
-  /* Легкое свечение вокруг кнопки */
   box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
 }
 
@@ -722,6 +721,5 @@ tbody tr:last-child td {
 .google-btn:active {
   background-color: #f1f3f4;
   transform: scale(0.98);
-  /* Кнопка слегка прожимается внутрь */
   box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3);
 }

@@ -937,7 +937,7 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
     elements.authContainer.innerHTML = `
       <div class="user-info">
         <span class="cloud-status">☁️ Cloud Active: <strong>${currentUser.email}</strong></span>
-        <button type="button" id="authSignOutBtn" class="secondary-button compact-button">Выйти</button>
+        <button type="button" id="authSignOutBtn" class="secondary-button compact-button">Log Out</button>
       </div>
     `;
     document.querySelector("#authSignOutBtn").addEventListener("click", () => supabaseClient.auth.signOut());
