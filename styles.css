@@ -728,5 +728,5 @@ tbody tr:last-child td {
 }
 
 .log-out-btn {
-  cursor: pointer;
+  cursor: pointer !important;
 }
