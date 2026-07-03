@@ -25,6 +25,7 @@
         <button class="language-button active" type="button" data-language="en">EN</button>
         <button class="language-button" type="button" data-language="nl">NL</button>
       </div>
+      <button id="helpBtn" class="help-btn">❓ Help</button>
     </header>
     <div id="authContainer" class="auth-bar">
       <button type="button" id="authGoogleBtn" class="google-btn">
@@ -213,8 +214,97 @@
       <polyline points="18 7 12 1 6 7"></polyline>
     </svg>
   </button>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js"></script>
+
+  <!-- Help Modal -->
+  <div id="helpModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h2>Portion Planner — User Guide</h2>
+      <p>Welcome to the Portion Planner! This application is designed to automate and simplify your shift calculations,
+        dough batch scheduling, and recipe scaling directly on the bakery floor.</p>
+
+      <h3>🔐 1. Getting Started & Syncing Data</h3>
+      <ul>
+        <li><strong>Google Sign-In:</strong> At the top of the screen, you will see a "Sign in with Google" button.
+          Clicking this allows you to automatically back up and sync your custom presets and calculation history to the
+          cloud.</li>
+        <li><strong>Local Mode:</strong> If you choose not to log in, the app works entirely offline and saves your
+          progress locally in your browser.</li>
+        <li><strong>Language Toggle:</strong> Switch between English (EN) and Dutch (NL) instantly using the buttons in
+          the top header. All numbers, weights, and dates will format automatically according to the selected country's
+          standards.</li>
+      </ul>
+
+      <h3>⏱️ 2. Setting Up Your Shift</h3>
+      <ul>
+        <li><strong>Production Window:</strong> Enter your shift's starting time in "Production start" and finishing
+          time in "Production end".</li>
+        <li><strong>Tip:</strong> If you are starting right now, simply tap the "Now" button to grab your current
+          phone/computer time instantly.</li>
+        <li><strong>Portion Time:</strong> In "Full portion time, min", type how many minutes it takes to complete a
+          single standard portion cycle.</li>
+        <li><strong>Portion Weight:</strong> In "Full portion weight, kg", enter the total target weight of one full
+          batch.</li>
+        <li><strong>Current Portion Number:</strong> If you are running calculations from the very beginning of the
+          shift, leave this at 1. If you are recalculating a schedule mid-shift, change this to the number of the batch
+          you are currently mixing.</li>
+      </ul>
+
+      <h3>🔄 3. Using Shift Presets</h3>
+      <p>To save time, the application comes with standard pre-configured shifts:</p>
+      <ul>
+        <li>Click the "Presets" dropdown menu to select a shift (e.g., Standard, Morning shift, Evening shift).</li>
+        <li><strong>Save Custom Presets:</strong> If you adjust the times and want to remember them for later, click
+          "Save preset", type a name, and it will be saved to your account.</li>
+        <li><strong>Delete Presets:</strong> Custom presets can be removed by selecting them and clicking "Delete
+          preset". (Built-in standard presets cannot be deleted).</li>
+      </ul>
+
+      <h3>⚖️ 4. Scaling Additives (Fat, Water, Sugar, Flour)</h3>
+      <p>If your current recipe requires adjustments per portion, use the "Additives per full portion" block.</p>
+      <ul>
+        <li>Enter the values in kilograms or liters for a full portion.</li>
+        <li><strong>Negative Values:</strong> The app fully supports negative values (e.g., -1.5 if you need to subtract
+          water or flour due to dough consistency). On mobile devices, tap the symbols panel on your keyboard to type
+          the minus (-) sign.</li>
+        <li>The system will automatically calculate the exact proportion of these additives for every batch, including
+          the final partial batch.</li>
+        <li>Click "Reset additives" to quickly clear all additive inputs back to empty.</li>
+      </ul>
+
+      <h3>☕ 5. Planning Breaks & Technical Pauses</h3>
+      <p>The scheduler allows you to pause production without messing up your end-time math:</p>
+      <ul>
+        <li>Tap "Add break".</li>
+        <li>Give the break a name (e.g., «Lunch», «Knife Cleaning», «Technical Pause»).</li>
+        <li>Enter the Break start and Break end times.</li>
+        <li>The calculator will automatically freeze any active portion timeline during this window and smoothly resume
+          it the exact minute the break ends.</li>
+        <li>To remove a break, tap the "X" button next to it.</li>
+      </ul>
+
+      <h3>📊 6. Reading Results & Sharing</h3>
+      <p>Once all data is filled out, tap the large green "Calculate" button. The app generates a timeline dashboard:
+      </p>
+      <ul>
+        <li><strong>Summary Box:</strong> Shows total counts of expected portions, accumulated shift weights, and the
+          combined sum of all required additives.</li>
+        <li><strong>Night Shift Indicator:</strong> If your shift crosses midnight, subsequent times will safely display
+          a +1 badge next to the hour.</li>
+        <li><strong>Incomplete Last Portion:</strong> If your final batch doesn't have enough time to finish completely
+          before "Production end", the app automatically calculates its reduced weight and scaled ingredients so you
+          don't waste raw materials.</li>
+        <li><strong>Smart Mobile View:</strong> If your shift contains more than 8 portions, the middle rows of the
+          table will collapse automatically so you don't have to scroll endlessly on a mobile phone screen.</li>
+        <li><strong>Sharing the Plan:</strong> Tap "Copy schedule". A cleanly formatted text timeline will be copied to
+          your clipboard. You can instantly paste it directly into WhatsApp, Teams, or any work chat to share it with
+          your team.</li>
+      </ul>
+
+
+
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+      <script src="app.js"></script>
 </body>
 
 </html>

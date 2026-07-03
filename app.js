@@ -142,6 +142,28 @@ const presetKey = "bakeryPortionPlannerPresets";
 const historyKey = "bakeryPortionPlannerHistory";
 const maxHistoryItems = 50;
 
+//add help modal logic
+const helpModal = document.getElementById("helpModal");
+const helpBtn = document.getElementById("helpBtn");
+const closeBtn = document.querySelector(".close-btn");
+
+
+helpBtn.addEventListener("click", () => {
+  helpModal.style.display = "block";
+});
+
+
+closeBtn.addEventListener("click", () => {
+  helpModal.style.display = "none";
+});
+
+
+window.addEventListener("click", (event) => {
+  if (event.target === helpModal) {
+    helpModal.style.display = "none";
+  }
+});
+
 const fields = [
   "productionStart",
   "productionEnd",
@@ -1133,3 +1155,4 @@ if (scrollToTopBtn) {
   scrollToTopBtn.addEventListener("touchstart", doScrollTop, { passive: false });
   scrollToTopBtn.addEventListener("click", doScrollTop);
 }
+
