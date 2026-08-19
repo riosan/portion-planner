@@ -1161,7 +1161,7 @@ if (scrollToTopBtn) {
 }
 
 
-function generateQrCode() {
+async function generateQrCode() {
   const container = document.getElementById("qrCode");
   if (!container) return;
 
@@ -1170,15 +1170,19 @@ function generateQrCode() {
   const canvas = document.createElement("canvas");
   container.appendChild(canvas);
 
-  QRCode.toCanvas(canvas, window.location.href, {
-    width: 200,
-    margin: 2,
-    errorCorrectionLevel: "H",
-    color: {
-      dark: "#000000",
-      light: "#ffffff"
-    }
-  });
+  try {
+    await QRCode.toCanvas(canvas, window.location.href, {
+      width: 200,
+      margin: 2,
+      errorCorrectionLevel: "H",
+      color: {
+        dark: "#000000",
+        light: "#ffffff"
+      }
+    });
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 generateQrCode();
