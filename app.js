@@ -1160,20 +1160,25 @@ if (scrollToTopBtn) {
   scrollToTopBtn.addEventListener("click", doScrollTop);
 }
 
-function generateQrCode() {
-  const qrCodeContainer = document.getElementById("qrCode");
-  qrCodeContainer.innerHTML = ""; // Clear previous QR code if any
 
-  const url = window.location.href;
-  const qrCode = new QRCode(qrCodeContainer, {
-    text: url,
-    width: 128,
-    height: 128,
-    colorDark: "#000000",
-    colorLight: "#ffffff",
-    correctLevel: "H"
+function generateQrCode() {
+  const container = document.getElementById("qrCode");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  const canvas = document.createElement("canvas");
+  container.appendChild(canvas);
+
+  QRCode.toCanvas(canvas, window.location.href, {
+    width: 200,
+    margin: 2,
+    errorCorrectionLevel: "H",
+    color: {
+      dark: "#000000",
+      light: "#ffffff"
+    }
   });
 }
 
-// Generate QR code on page load
 generateQrCode();
