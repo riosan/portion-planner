@@ -672,7 +672,7 @@ function applyPreset(id) {
 }
 
 function savePreset() {
-  const name = window.prompt(t("presetNamePrompt"));
+  let name = window.prompt(t("presetNamePrompt"));
 
   if (!name?.trim()) {
     return;
