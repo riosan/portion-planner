@@ -830,3 +830,21 @@ tbody tr:last-child td {
   height: 240px !important;
   margin-top: 10px;
 }
+
+
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.title-row h1 {
+  margin: 0;
+}
+
+.qr-container canvas {
+  display: block;
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 6px;
+}

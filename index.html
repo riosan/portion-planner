@@ -19,16 +19,20 @@
     <header class="topbar">
       <div>
         <p class="eyebrow" data-i18n="eyebrow">Bakery production</p>
-        <h1 data-i18n="title">Portion Planner</h1>
+        <div class="title-row">
+          <h1 data-i18n="title">Portion Planner</h1>
+          <div id="qrCode" class="qr-container"></div>
+          <button id="helpBtn" class="help-btn">❓ Help</button>
+        </div>
       </div>
 
-      <div id="qrCode" class="qr-container"></div>
+
       <div class="language-switch" aria-label="Language">
         <button class="language-button active" type="button" data-language="en">EN</button>
         <button class="language-button" type="button" data-language="nl">NL</button>
       </div>
 
-      <button id="helpBtn" class="help-btn">❓ Help</button>
+
     </header>
     <div id="authContainer" class="auth-bar">
       <button type="button" id="authGoogleBtn" class="google-btn">
