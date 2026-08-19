@@ -679,7 +679,7 @@ function savePreset() {
   }
 
   const d = new Date();
-  name += ` ${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`;
+  name += ` ${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}_${d.getHours()}:${d.getMinutes()}`;
 
   const id = `custom-${Date.now()}`;
   customPresets.push({
