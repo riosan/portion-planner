@@ -1160,3 +1160,20 @@ if (scrollToTopBtn) {
   scrollToTopBtn.addEventListener("click", doScrollTop);
 }
 
+function generateQrCode() {
+  const qrCodeContainer = document.getElementById("qrCode");
+  qrCodeContainer.innerHTML = ""; // Clear previous QR code if any
+
+  const url = window.location.href;
+  const qrCode = new QRCode(qrCodeContainer, {
+    text: url,
+    width: 128,
+    height: 128,
+    colorDark: "#000000",
+    colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.H
+  });
+}
+
+// Generate QR code on page load
+generateQrCode();
