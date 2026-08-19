@@ -673,9 +673,13 @@ function applyPreset(id) {
 
 function savePreset() {
   const name = window.prompt(t("presetNamePrompt"));
+
   if (!name?.trim()) {
     return;
   }
+
+  const d = new Date();
+  name += ` ${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`;
 
   const id = `custom-${Date.now()}`;
   customPresets.push({
