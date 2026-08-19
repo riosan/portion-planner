@@ -146,12 +146,17 @@ const maxHistoryItems = 50;
 const helpModal = document.getElementById("helpModal");
 const helpBtn = document.getElementById("helpBtn");
 const closeBtn = document.querySelector(".close-btn");
+const qrModal = document.getElementById("qrModal");
+const openQrBtn = document.getElementById("qrCode");
 
 
 helpBtn.addEventListener("click", () => {
   helpModal.style.display = "block";
 });
 
+openQrBtn.addEventListener("click", () => {
+  qrModal.style.display = "block";
+});
 
 closeBtn.addEventListener("click", () => {
   helpModal.style.display = "none";
@@ -1161,28 +1166,35 @@ if (scrollToTopBtn) {
 }
 
 
-async function generateQrCode() {
-  const container = document.getElementById("qrCode");
-  if (!container) return;
+async function generateQrCodes(targets) {
+  if (typeof QRCode === "undefined") return;
 
-  container.innerHTML = "";
+  for (const { id, width, margin } of targets) {
+    const container = document.getElementById(id);
+    if (!container) continue;
 
-  const canvas = document.createElement("canvas");
-  container.appendChild(canvas);
+    container.innerHTML = "";
+    const canvas = document.createElement("canvas");
+    container.appendChild(canvas);
 
-  try {
-    await QRCode.toCanvas(canvas, window.location.href, {
-      width: 200,
-      margin: 2,
-      errorCorrectionLevel: "H",
-      color: {
-        dark: "#000000",
-        light: "#ffffff"
-      }
-    });
-  } catch (err) {
-    console.error(err);
+    try {
+      await QRCode.toCanvas(canvas, window.location.href, {
+        width: width || 50,
+        margin: margin || 2,
+        errorCorrectionLevel: "H",
+        color: {
+          dark: "#000000",
+          light: "#ffffff"
+        }
+      });
+    } catch (err) {
+      console.error(`Error generating QR for #${id}:`, err);
+    }
   }
 }
 
-generateQrCode();
+
+generateQrCodes([
+  { id: "qrCode", width: 50, margin: 2 },
+  { id: "qrModalCode", width: 240, margin: 2 }
+]);

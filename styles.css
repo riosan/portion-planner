@@ -809,13 +809,24 @@ tbody tr:last-child td {
   background: rgba(0, 0, 0, 0.12);
 }
 
-#qrCode {
-  display: block;
-  min-width: 200px;
-  min-height: 200px;
+
+.qr-container {
+  cursor: pointer;
 }
 
-#qrCode canvas {
-  display: block;
-  margin: 0 auto;
+.qr-container canvas {
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: 6px;
+}
+
+.qr-modal-content {
+  text-align: center;
+  max-width: 300px;
+}
+
+#qrModalCode canvas {
+  width: 240px !important;
+  height: 240px !important;
+  margin-top: 10px;
 }

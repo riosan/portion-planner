@@ -25,7 +25,12 @@
         <button class="language-button active" type="button" data-language="en">EN</button>
         <button class="language-button" type="button" data-language="nl">NL</button>
       </div>
-      <canvas id="qrCode"></canvas>
+
+      <div id="qrCode" class="qr-container"></div>
+
+
+
+
       <button id="helpBtn" class="help-btn">❓ Help</button>
     </header>
     <div id="authContainer" class="auth-bar">
@@ -301,6 +306,13 @@
           your clipboard. You can instantly paste it directly into WhatsApp, Teams, or any work chat to share it with
           your team.</li>
       </ul>
+    </div>
+  </div>
+
+  <div id="qrModal" class="modal">
+    <div class="modal-content qr-modal-content">
+      <span class="close-btn" onclick="document.getElementById('qrModal').style.display='none'">&times;</span>
+      <div id="qrModalCode"></div>
     </div>
   </div>
 
