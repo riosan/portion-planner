@@ -1002,10 +1002,7 @@ async function handleGoogleAuth() {
     alert("Google Authorization Error: " + error.message);
   }
 
-  generateQrCodes([
-    { id: "qrCode", width: 50, margin: 2 },
-    { id: "qrModalCode", width: 240, margin: 2 }
-  ]);
+
 
 }
 
@@ -1200,7 +1197,12 @@ async function generateQrCodes(targets) {
 }
 
 
-generateQrCodes([
-  { id: "qrCode", width: 50, margin: 2 },
-  { id: "qrModalCode", width: 240, margin: 2 }
-]);
+document.addEventListener("DOMContentLoaded", () => {
+  generateQrCodes([
+    { id: "qrCode", width: 50, margin: 2 },
+    { id: "qrModalCode", width: 240, margin: 2 }
+  ]);
+});
+
+
+
