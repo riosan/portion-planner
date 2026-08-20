@@ -1001,6 +1001,12 @@ async function handleGoogleAuth() {
   if (error) {
     alert("Google Authorization Error: " + error.message);
   }
+
+  generateQrCodes([
+    { id: "qrCode", width: 50, margin: 2 },
+    { id: "qrModalCode", width: 240, margin: 2 }
+  ]);
+
 }
 
 function loadState() {
