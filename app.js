@@ -988,6 +988,12 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
     `;
     document.querySelector("#authGoogleBtn").addEventListener("click", handleGoogleAuth);
   }
+
+  generateQrCodes([
+    { id: "qrCode", width: 50, margin: 2 },
+    { id: "qrModalCode", width: 240, margin: 2 }
+  ]);
+
 });
 
 async function handleGoogleAuth() {
@@ -1196,13 +1202,10 @@ async function generateQrCodes(targets) {
   }
 }
 
-
-document.addEventListener("DOMContentLoaded", () => {
-  generateQrCodes([
-    { id: "qrCode", width: 50, margin: 2 },
-    { id: "qrModalCode", width: 240, margin: 2 }
-  ]);
-});
+generateQrCodes([
+  { id: "qrCode", width: 50, margin: 2 },
+  { id: "qrModalCode", width: 240, margin: 2 }
+]);
 
 
 
