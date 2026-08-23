@@ -149,6 +149,9 @@ const closeBtn = document.querySelector(".close-btn");
 const qrModal = document.getElementById("qrModal");
 const openQrBtn = document.getElementById("qrCode");
 
+document.getElementById("portionMinutes").addEventListener("input", showMinAndSec);
+
+
 
 helpBtn.addEventListener("click", () => {
   helpModal.style.display = "block";
@@ -1208,4 +1211,15 @@ generateQrCodes([
 ]);
 
 
+function showMinAndSec() {
 
+  const PTimesToMinAndSec = numberValue("portionMinutes");
+  const min = Math.trunc(PTimesToMinAndSec);
+  const sec = Math.round((PTimesToMinAndSec - min) * 60);
+
+  const text = document.getElementById("PTimesToMinAndSec");
+  if (text) {
+    text.textContent = `Full portion time, min: ${min} min ${sec} sec`;
+  }
+
+}
