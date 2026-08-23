@@ -835,6 +835,7 @@ function setLanguage(nextLanguage) {
     button.classList.toggle("active", button.dataset.language === nextLanguage);
   });
 
+  showMinAndSec();
   renderPresets();
   renderBreaks();
   renderHistory();
@@ -1223,3 +1224,5 @@ function showMinAndSec() {
   }
 
 }
+
+showMinAndSec();
