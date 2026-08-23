@@ -1219,7 +1219,7 @@ function showMinAndSec() {
 
   const text = document.getElementById("PTimesToMinAndSec");
   if (text) {
-    text.textContent = `Full portion time, min: ${min} min ${sec} sec`;
+    text.textContent = t("portionMinutes") + `: ${min} min ${sec} sec`;
   }
 
 }
