@@ -743,21 +743,35 @@ tbody tr:last-child td {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(3px);
+
+
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
+
+.modal.open,
+.modal[style*="display: block"] {
+  display: flex !important;
+}
 
 .modal-content {
   background-color: #fefefe;
-  margin: 10% auto;
   padding: 20px;
   border-radius: 12px;
-  width: 90%;
+  width: 100%;
   max-width: 600px;
-  max-height: 80vh;
-  overflow-y: auto;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
+  max-height: 85vh;
 
+  overflow-y: auto;
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+
+
+  margin: 0;
+}
 
 .close-btn {
   color: #aaa;
@@ -767,9 +781,7 @@ tbody tr:last-child td {
   cursor: pointer;
 }
 
-.close-btn:hover {
-  color: #000;
-}
+
 
 .guide-text {
   line-height: 1.6;
