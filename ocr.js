@@ -1,10 +1,14 @@
 let worker = null;
 let mediaStream = null;
 
-// Initialize Tesseract worker with english and dutch models
+// Initialize Tesseract worker (compatible with Tesseract.js v4 & v5+)
 async function initOCR() {
     if (!worker) {
-        worker = await Tesseract.createWorker('eng+nld');
+        // Create worker without arguments for v5 compatibility
+        worker = await Tesseract.createWorker();
+        // Load language explicitly
+        await worker.loadLanguage('eng+nld');
+        await worker.initialize('eng+nld');
     }
 }
 
@@ -75,7 +79,6 @@ function captureCroppedFrameToCanvas() {
     const cropW = Math.min(vw - cropX, overlayRect.width / scale);
     const cropH = Math.min(vh - cropY, overlayRect.height / scale);
 
-    // Prevent invalid 0-size canvas execution
     if (cropW <= 0 || cropH <= 0) return false;
 
     canvas.width = cropW;
@@ -83,7 +86,7 @@ function captureCroppedFrameToCanvas() {
 
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
-    // Draw pure image directly from video without lossy thresholding
+    // Draw region to canvas
     ctx.drawImage(
         video,
         cropX, cropY, cropW, cropH,
@@ -102,21 +105,31 @@ async function scanCropCanvas() {
         throw new Error("Video frame is not ready or crop size is invalid.");
     }
 
-    await initOCR();
+    try {
+        await initOCR();
 
-    // Recognize text directly from raw cropped canvas
-    const result = await worker.recognize(canvas);
+        // Recognize text from canvas
+        const result = await worker.recognize(canvas);
 
-    if (!result || !result.data) {
-        return "";
+        if (!result || !result.data || !result.data.text) {
+            return "";
+        }
+
+        // Clean output string
+        return result.data.text
+            .replace(/[\r\n]+/g, " ")
+            .replace(/[^a-zA-Z0-9\s.-]/g, "")
+            .replace(/\s+/g, " ")
+            .trim();
+    } catch (ocrError) {
+        console.error("Tesseract recognition error:", ocrError);
+        // Force worker reset on failure to prevent stuck state
+        if (worker) {
+            await worker.terminate();
+            worker = null;
+        }
+        throw ocrError;
     }
-
-    // Clean output string from unexpected artifacts and multiple line breaks
-    return result.data.text
-        .replace(/[\r\n]+/g, " ")
-        .replace(/[^a-zA-Z0-9\s.-]/g, "")
-        .replace(/\s+/g, " ")
-        .trim();
 }
 
 // Terminate Tesseract worker and stop camera stream
