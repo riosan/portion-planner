@@ -753,7 +753,11 @@ function openOcrModalAndGetName() {
     const ocrBtn = document.getElementById("ocrBtn");
     const inputField = document.getElementById("presetNameInput");
 
-    inputField.value = "";
+    // Reset input field value before opening modal
+    if (inputField) {
+      inputField.value = "";
+    }
+
     modal.style.display = "flex";
     startOcrCamera();
 
@@ -762,17 +766,23 @@ function openOcrModalAndGetName() {
         ocrBtn.disabled = true;
         ocrBtn.textContent = "Scanning...";
 
-        // Вызываем сканирование обрезанного фрагмента
-        const text = await scanCropCanvas();
+        const recognizedText = await scanCropCanvas();
 
-        if (text) {
-          inputField.value = text;
+        // Query element directly to prevent null object reference issues on mobile
+        const targetInput = document.getElementById("presetNameInput");
+
+        if (targetInput) {
+          targetInput.value = recognizedText || "";
         } else {
+          console.error("Input element #presetNameInput was not found in DOM");
+        }
+
+        if (!recognizedText) {
           alert("No text detected in the frame.");
         }
-      } catch (err) {
-        console.error("Scanning error:", err);
-        alert("Error during scanning. Please try again.");
+      } catch (error) {
+        console.error("OCR error:", error);
+        alert("Scanning error: " + (error.message || error));
       } finally {
         ocrBtn.disabled = false;
         ocrBtn.textContent = "Scan";
@@ -780,8 +790,10 @@ function openOcrModalAndGetName() {
     };
 
     const handleConfirm = () => {
+      const targetInput = document.getElementById("presetNameInput");
+      const nameValue = targetInput ? targetInput.value : "";
       cleanup();
-      resolve(inputField.value);
+      resolve(nameValue);
     };
 
     const handleClose = () => {
