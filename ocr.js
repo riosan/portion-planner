@@ -79,47 +79,45 @@ function captureCroppedFrameToCanvas() {
     return true;
 }
 
-// Safely capture cropped frame and perform text recognition
+// OCR processing with safe worker lifecycle management
 async function scanCropCanvas() {
     const video = document.getElementById('ocrVideo');
     const canvas = document.getElementById('ocrCanvas');
 
     if (!video || !canvas) {
-        throw new Error("Video or Canvas elements not found in DOM.");
+        throw new Error("Video or Canvas elements not found.");
     }
 
-    // Ensure the video stream is active and dimensions are available
     if (video.readyState < 2 || !video.videoWidth) {
-        throw new Error("Camera stream is not ready yet. Please wait a second and try again.");
+        throw new Error("Camera stream is not ready yet.");
     }
 
-    // Capture the current video frame into canvas
     const isCaptured = captureCroppedFrameToCanvas();
-
     if (!isCaptured) {
         throw new Error("Failed to capture video frame.");
     }
 
-    // Initialize OCR engine with network error handling
     try {
+        // Re-initialize worker safely if needed
         await initOCR();
-    } catch (e) {
-        throw new Error("Failed to load OCR engine. Check your internet connection.");
+
+        // Recognize text from cropped canvas
+        const result = await worker.recognize(canvas);
+        const text = result && result.data ? result.data.text : "";
+
+        // Clean up recognized string
+        const cleanedText = text
+            .replace(/[\r\n]+/g, " ")
+            .replace(/[^a-zA-Z0-9\s.-]/g, "")
+            .replace(/\s+/g, " ")
+            .trim();
+
+        return cleanedText;
+    } catch (err) {
+        // Suppress non-critical worker termination errors if text was parsed
+        console.warn("OCR Worker warning/error:", err);
+        throw err;
     }
-
-    // Execute text recognition
-    const result = await worker.recognize(canvas);
-
-    if (!result || !result.data || !result.data.text) {
-        return "";
-    }
-
-    // Clean up and format recognized string
-    return result.data.text
-        .replace(/[\r\n]+/g, " ")
-        .replace(/[^a-zA-Z0-9\s.-]/g, "")
-        .replace(/\s+/g, " ")
-        .trim();
 }
 
 // Close OCR worker and camera

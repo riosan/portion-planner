@@ -771,18 +771,23 @@ function openOcrModalAndGetName() {
         // Run OCR recognition
         const recognizedText = await scanCropCanvas();
 
-        // Always fetch fresh reference to input element
-        const currentInput = getInputField();
-        if (currentInput) {
-          currentInput.value = recognizedText || "";
+        // Insert text if reference exists
+        const currentInput = document.getElementById("presetNameInput");
+        if (currentInput && recognizedText) {
+          currentInput.value = recognizedText;
         }
 
         if (!recognizedText) {
           alert("No text detected in the frame.");
         }
       } catch (error) {
-        console.error("Scan error:", error);
-        alert("Scanning error: " + (error.message || error));
+        console.error("Scan internal error:", error);
+
+        // If input already received value before worker error, ignore alert
+        const currentInput = document.getElementById("presetNameInput");
+        if (!currentInput || !currentInput.value) {
+          alert("Scanning error: " + (error.message || error));
+        }
       } finally {
         ocrBtn.disabled = false;
         ocrBtn.textContent = "Scan";
