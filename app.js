@@ -714,25 +714,24 @@ function applyPreset(id) {
 
 
 
+// Function to handle saving preset
 async function savePreset() {
-
   const scannedName = await openOcrModalAndGetName();
 
-  if (!scannedName?.trim()) {
+  if (!scannedName || !scannedName.trim()) {
     return;
   }
 
   let name = scannedName.trim();
-
-
   const d = new Date();
-  name += ` ${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}_${d.getHours()}:${d.getMinutes() < 10 ? "0" : ""}${d.getMinutes()}`;
+  const timeStamp = `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}_${d.getHours()}:${d.getMinutes() < 10 ? "0" : ""}${d.getMinutes()}`;
+  name += ` ${timeStamp}`;
 
   const id = `custom-${Date.now()}`;
   customPresets.push({
     id,
     builtIn: false,
-    name: name.trim(),
+    name: name,
     fields: getFormFields(),
     breaks: breaks.map(cleanBreak)
   });
@@ -745,14 +744,18 @@ async function savePreset() {
 }
 
 
+// Function to handle modal lifecycle and name scanning
 function openOcrModalAndGetName() {
   return new Promise((resolve) => {
     const modal = document.getElementById("ocrModal");
     const closeBtn = document.getElementById("closeOcrModalBtn");
     const confirmBtn = document.getElementById("confirmPresetBtn");
     const ocrBtn = document.getElementById("ocrBtn");
-    const inputField = document.getElementById("presetNameInput");
 
+    // Dynamic getter to avoid null reference issues
+    const getInputField = () => document.getElementById("presetNameInput");
+
+    const inputField = getInputField();
     if (inputField) {
       inputField.value = "";
     }
@@ -765,11 +768,13 @@ function openOcrModalAndGetName() {
         ocrBtn.disabled = true;
         ocrBtn.textContent = "Scanning...";
 
-        // Execute recognition module
+        // Run OCR recognition
         const recognizedText = await scanCropCanvas();
 
-        if (inputField) {
-          inputField.value = recognizedText || "";
+        // Always fetch fresh reference to input element
+        const currentInput = getInputField();
+        if (currentInput) {
+          currentInput.value = recognizedText || "";
         }
 
         if (!recognizedText) {
@@ -785,7 +790,8 @@ function openOcrModalAndGetName() {
     };
 
     const handleConfirm = () => {
-      const resultValue = inputField ? inputField.value : "";
+      const currentInput = getInputField();
+      const resultValue = currentInput ? currentInput.value : "";
       cleanup();
       resolve(resultValue);
     };
