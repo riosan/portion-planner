@@ -79,22 +79,42 @@ function captureCroppedFrameToCanvas() {
     return true;
 }
 
-// Main scan function (returns text string only)
+// Safely capture cropped frame and perform text recognition
 async function scanCropCanvas() {
+    const video = document.getElementById('ocrVideo');
     const canvas = document.getElementById('ocrCanvas');
+
+    if (!video || !canvas) {
+        throw new Error("Video or Canvas elements not found in DOM.");
+    }
+
+    // Ensure the video stream is active and dimensions are available
+    if (video.readyState < 2 || !video.videoWidth) {
+        throw new Error("Camera stream is not ready yet. Please wait a second and try again.");
+    }
+
+    // Capture the current video frame into canvas
     const isCaptured = captureCroppedFrameToCanvas();
 
     if (!isCaptured) {
-        throw new Error("Video frame is not ready.");
+        throw new Error("Failed to capture video frame.");
     }
 
-    await initOCR();
+    // Initialize OCR engine with network error handling
+    try {
+        await initOCR();
+    } catch (e) {
+        throw new Error("Failed to load OCR engine. Check your internet connection.");
+    }
+
+    // Execute text recognition
     const result = await worker.recognize(canvas);
 
     if (!result || !result.data || !result.data.text) {
         return "";
     }
 
+    // Clean up and format recognized string
     return result.data.text
         .replace(/[\r\n]+/g, " ")
         .replace(/[^a-zA-Z0-9\s.-]/g, "")

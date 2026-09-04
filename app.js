@@ -765,7 +765,7 @@ function openOcrModalAndGetName() {
         ocrBtn.disabled = true;
         ocrBtn.textContent = "Scanning...";
 
-        // Get recognized string from OCR module
+        // Execute recognition module
         const recognizedText = await scanCropCanvas();
 
         if (inputField) {
