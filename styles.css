@@ -904,3 +904,32 @@ tbody tr:last-child td {
   border: 1px solid var(--line);
   border-radius: 6px;
 }
+
+
+
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+
+.scanner-controls input {
+  font-size: 16px !important;
+  flex: 1;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+
+.modal {
+  box-sizing: border-box;
+  max-width: 100vw;
+}
+
+.modal-content {
+  max-width: 90vw;
+  box-sizing: border-box;
+}
