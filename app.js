@@ -777,7 +777,7 @@ function openOcrModalAndGetName() {
         }
       } catch (error) {
         console.error("Scan error:", error);
-        alert("Scanning error: " + (error.message || error));
+        // alert("Scanning error: " + (error.message || error));
       } finally {
         ocrBtn.disabled = false;
         ocrBtn.textContent = "Scan";
