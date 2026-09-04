@@ -1,14 +1,14 @@
 let worker = null;
 let mediaStream = null;
 
-// Initialize Tesseract
+// Initialize Tesseract worker with english and dutch models
 async function initOCR() {
     if (!worker) {
         worker = await Tesseract.createWorker('eng+nld');
     }
 }
 
-// Start the camera for OCR
+// Start video stream from rear camera
 async function startOcrCamera() {
     const video = document.getElementById('ocrVideo');
     try {
@@ -27,7 +27,7 @@ async function startOcrCamera() {
     }
 }
 
-// Stop the camera 
+// Stop video stream and release tracks
 function stopOcrCamera() {
     if (mediaStream) {
         mediaStream.getTracks().forEach(track => track.stop());
@@ -35,7 +35,7 @@ function stopOcrCamera() {
     }
 }
 
-
+// Crop precise frame using overlay target coordinates
 function captureCroppedFrameToCanvas() {
     const video = document.getElementById('ocrVideo');
     const canvas = document.getElementById('ocrCanvas');
@@ -51,74 +51,75 @@ function captureCroppedFrameToCanvas() {
     const elemW = video.clientWidth;
     const elemH = video.clientHeight;
 
-    // 3. Calculate scale factor taking object-fit: cover into account
+    // 3. Scale factor calculation (object-fit: cover)
     const scale = Math.max(elemW / vw, elemH / vh);
 
-    // Visible area of video stream in original pixels
+    // Visible area inside video element
     const visibleW = elemW / scale;
     const visibleH = elemH / scale;
 
-    // Cropping offsets due to object-fit: cover
+    // Offsets for object-fit clipping
     const offsetX = (vw - visibleW) / 2;
     const offsetY = (vh - visibleH) / 2;
 
-    // 4. Bounding rect of overlay target frame relative to video element
+    // 4. Overlay target position relative to video container
     const overlayRect = overlay.getBoundingClientRect();
     const videoRect = video.getBoundingClientRect();
 
     const overlayX = overlayRect.left - videoRect.left;
     const overlayY = overlayRect.top - videoRect.top;
 
-    // 5. Precise crop coordinates inside the source video stream
-    const cropX = offsetX + (overlayX / scale);
-    const cropY = offsetY + (overlayY / scale);
-    const cropW = overlayRect.width / scale;
-    const cropH = overlayRect.height / scale;
+    // 5. Crop coordinates inside original video resolution
+    const cropX = Math.max(0, offsetX + (overlayX / scale));
+    const cropY = Math.max(0, offsetY + (overlayY / scale));
+    const cropW = Math.min(vw - cropX, overlayRect.width / scale);
+    const cropH = Math.min(vh - cropY, overlayRect.height / scale);
+
+    // Prevent invalid 0-size canvas execution
+    if (cropW <= 0 || cropH <= 0) return false;
 
     canvas.width = cropW;
     canvas.height = cropH;
 
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
-    // Draw only the exact frame region onto the canvas
+    // Draw pure image directly from video without lossy thresholding
     ctx.drawImage(
         video,
         cropX, cropY, cropW, cropH,
         0, 0, cropW, cropH
     );
 
-    // Preprocessing: convert to high-contrast black & white for optimal OCR recognition
-    const imgData = ctx.getImageData(0, 0, cropW, cropH);
-    const d = imgData.data;
-    for (let i = 0; i < d.length; i += 4) {
-        const avg = (d[i] + d[i + 1] + d[i + 2]) / 3;
-        const color = avg > 120 ? 255 : 0;
-        d[i] = color;
-        d[i + 1] = color;
-        d[i + 2] = color;
-    }
-    ctx.putImageData(imgData, 0, 0);
-
     return true;
 }
 
-// Run OCR
+// Process image recognition safely
 async function scanCropCanvas() {
     const canvas = document.getElementById('ocrCanvas');
     const isCaptured = captureCroppedFrameToCanvas();
 
     if (!isCaptured) {
-        throw new Error("Video frame is not ready");
+        throw new Error("Video frame is not ready or crop size is invalid.");
     }
 
     await initOCR();
-    const { data } = await worker.recognize(canvas);
 
-    // Clean text from special characters and noise
-    return data.text.replace(/[^a-zA-Z0-9\s.-]/g, "").replace(/\s+/g, " ").trim();
+    // Recognize text directly from raw cropped canvas
+    const result = await worker.recognize(canvas);
+
+    if (!result || !result.data) {
+        return "";
+    }
+
+    // Clean output string from unexpected artifacts and multiple line breaks
+    return result.data.text
+        .replace(/[\r\n]+/g, " ")
+        .replace(/[^a-zA-Z0-9\s.-]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
 }
 
-// Close OCR
+// Terminate Tesseract worker and stop camera stream
 async function closeOCR() {
     stopOcrCamera();
     if (worker) {
