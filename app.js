@@ -752,35 +752,33 @@ function openOcrModalAndGetName() {
     const confirmBtn = document.getElementById("confirmPresetBtn");
     const ocrBtn = document.getElementById("ocrBtn");
     const inputField = document.getElementById("presetNameInput");
-    const canvas = document.getElementById("ocrCanvas");
 
     inputField.value = "";
     modal.style.display = "flex";
     startOcrCamera();
 
-
     const handleScan = async () => {
       try {
         ocrBtn.disabled = true;
-        ocrBtn.textContent = "...";
+        ocrBtn.textContent = "Scanning...";
 
-        captureFrameToCanvas();
-        const text = await scanCropCanvas(canvas);
+        // Вызываем сканирование обрезанного фрагмента
+        const text = await scanCropCanvas();
 
         if (text) {
           inputField.value = text;
         } else {
-          alert("Couldn't recognize the text");
+          alert("No text detected in the frame.");
         }
       } catch (err) {
-        console.error("OCR error:", err);
+        console.error("Scanning error:", err);
+        alert("Error during scanning. Please try again.");
       } finally {
         ocrBtn.disabled = false;
         ocrBtn.textContent = "Scan";
       }
     };
 
-    // Accept and close
     const handleConfirm = () => {
       cleanup();
       resolve(inputField.value);

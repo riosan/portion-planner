@@ -1,7 +1,7 @@
 let worker = null;
 let mediaStream = null;
 
-
+t
 async function initOCR() {
     if (!worker) {
         worker = await Tesseract.createWorker('eng+nld');
@@ -39,61 +39,59 @@ function stopOcrCamera() {
 function captureCroppedFrameToCanvas() {
     const video = document.getElementById('ocrVideo');
     const canvas = document.getElementById('ocrCanvas');
-    if (!video || !canvas || video.videoWidth === 0) return false;
-
+    if (!video || !canvas || !video.videoWidth) return false;
 
     const vw = video.videoWidth;
     const vh = video.videoHeight;
 
+    // Берём 70% ширины и 20% высоты ровно из центра видеопотока
+    const cropWidth = Math.floor(vw * 0.7);
+    const cropHeight = Math.floor(vh * 0.25);
+    const cropX = Math.floor((vw - cropWidth) / 2);
+    const cropY = Math.floor((vh - cropHeight) / 2);
 
-    const displayW = video.clientWidth;
-    const displayH = video.clientHeight;
+    canvas.width = cropWidth;
+    canvas.height = cropHeight;
 
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
-    const cropW_disp = displayW * 0.8;
-    const cropH_disp = 60;
-    const cropX_disp = (displayW - cropW_disp) / 2;
-    const cropY_disp = (displayH - cropH_disp) / 2;
-
-
-    const scale = Math.max(vw / displayW, vh / displayH);
-
-    const actualCropW = cropW_disp * scale;
-    const actualCropH = cropH_disp * scale;
-    const actualCropX = (vw - cropW_disp * scale) / 2;
-    const actualCropY = (vh - cropH_disp * scale) / 2;
-
-
-    canvas.width = actualCropW;
-    canvas.height = actualCropH;
-
-    const ctx = canvas.getContext('2d');
 
     ctx.drawImage(
         video,
-        actualCropX, actualCropY, actualCropW, actualCropH,
-        0, 0, actualCropW, actualCropH
+        cropX, cropY, cropWidth, cropHeight,
+        0, 0, cropWidth, cropHeight
     );
+
+
+    const imgData = ctx.getImageData(0, 0, cropWidth, cropHeight);
+    const d = imgData.data;
+    for (let i = 0; i < d.length; i += 4) {
+        const avg = (d[i] + d[i + 1] + d[i + 2]) / 3;
+        const threshold = 130; // Порог контраста
+        const color = avg > threshold ? 255 : 0;
+        d[i] = color;     // R
+        d[i + 1] = color; // G
+        d[i + 2] = color; // B
+    }
+    ctx.putImageData(imgData, 0, 0);
 
     return true;
 }
 
 
 async function scanCropCanvas() {
-    try {
-        const canvas = document.getElementById('ocrCanvas');
-        const hasFrame = captureCroppedFrameToCanvas();
-        if (!hasFrame) return "";
+    const canvas = document.getElementById('ocrCanvas');
+    const isCaptured = captureCroppedFrameToCanvas();
 
-        await initOCR();
-        const { data } = await worker.recognize(canvas);
-
-
-        return data.text.replace(/[\r\n]+/g, " ").trim();
-    } catch (err) {
-        console.error("OCR recognition error:", err);
-        throw err;
+    if (!isCaptured) {
+        throw new Error("Video frame is not ready");
     }
+
+    await initOCR();
+    const { data } = await worker.recognize(canvas);
+
+
+    return data.text.replace(/[^a-zA-Z0-9\s.-]/g, "").replace(/\s+/g, " ").trim();
 }
 
 
