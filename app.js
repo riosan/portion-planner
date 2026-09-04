@@ -175,7 +175,7 @@ document.getElementById("ocrBtn").addEventListener("click", async () => {
 
   } catch (error) {
     console.error("OCR error:", error);
-    alert("Error during scanning");
+    alert(error);
   } finally {
 
     //4. Return the button to its original state
