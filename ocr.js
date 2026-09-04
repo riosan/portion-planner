@@ -1,18 +1,16 @@
 let worker = null;
 let mediaStream = null;
 
-// Initialize Tesseract worker (compatible with Tesseract.js v4 & v5+)
+// Initialize Tesseract worker
 async function initOCR() {
     if (!worker) {
-        // Create worker without arguments for v5 compatibility
         worker = await Tesseract.createWorker();
-        // Load language explicitly
         await worker.loadLanguage('eng+nld');
         await worker.initialize('eng+nld');
     }
 }
 
-// Start video stream from rear camera
+// Start camera stream
 async function startOcrCamera() {
     const video = document.getElementById('ocrVideo');
     try {
@@ -31,7 +29,7 @@ async function startOcrCamera() {
     }
 }
 
-// Stop video stream and release tracks
+// Stop camera stream
 function stopOcrCamera() {
     if (mediaStream) {
         mediaStream.getTracks().forEach(track => track.stop());
@@ -39,7 +37,7 @@ function stopOcrCamera() {
     }
 }
 
-// Crop precise frame using overlay target coordinates
+// Capture frame inside target overlay
 function captureCroppedFrameToCanvas() {
     const video = document.getElementById('ocrVideo');
     const canvas = document.getElementById('ocrCanvas');
@@ -47,33 +45,24 @@ function captureCroppedFrameToCanvas() {
 
     if (!video || !canvas || !overlay || !video.videoWidth) return false;
 
-    // 1. Source video stream dimensions
     const vw = video.videoWidth;
     const vh = video.videoHeight;
-
-    // 2. Displayed <video> element dimensions
     const elemW = video.clientWidth;
     const elemH = video.clientHeight;
 
-    // 3. Scale factor calculation (object-fit: cover)
     const scale = Math.max(elemW / vw, elemH / vh);
-
-    // Visible area inside video element
     const visibleW = elemW / scale;
     const visibleH = elemH / scale;
 
-    // Offsets for object-fit clipping
     const offsetX = (vw - visibleW) / 2;
     const offsetY = (vh - visibleH) / 2;
 
-    // 4. Overlay target position relative to video container
     const overlayRect = overlay.getBoundingClientRect();
     const videoRect = video.getBoundingClientRect();
 
     const overlayX = overlayRect.left - videoRect.left;
     const overlayY = overlayRect.top - videoRect.top;
 
-    // 5. Crop coordinates inside original video resolution
     const cropX = Math.max(0, offsetX + (overlayX / scale));
     const cropY = Math.max(0, offsetY + (overlayY / scale));
     const cropW = Math.min(vw - cropX, overlayRect.width / scale);
@@ -85,54 +74,35 @@ function captureCroppedFrameToCanvas() {
     canvas.height = cropH;
 
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
-
-    // Draw region to canvas
-    ctx.drawImage(
-        video,
-        cropX, cropY, cropW, cropH,
-        0, 0, cropW, cropH
-    );
+    ctx.drawImage(video, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
 
     return true;
 }
 
-// Process image recognition safely
+// Main scan function (returns text string only)
 async function scanCropCanvas() {
     const canvas = document.getElementById('ocrCanvas');
     const isCaptured = captureCroppedFrameToCanvas();
 
     if (!isCaptured) {
-        throw new Error("Video frame is not ready or crop size is invalid.");
+        throw new Error("Video frame is not ready.");
     }
 
-    try {
-        await initOCR();
+    await initOCR();
+    const result = await worker.recognize(canvas);
 
-        // Recognize text from canvas
-        const result = await worker.recognize(canvas);
-
-        if (!result || !result.data || !result.data.text) {
-            return "";
-        }
-
-        // Clean output string
-        return result.data.text
-            .replace(/[\r\n]+/g, " ")
-            .replace(/[^a-zA-Z0-9\s.-]/g, "")
-            .replace(/\s+/g, " ")
-            .trim();
-    } catch (ocrError) {
-        console.error("Tesseract recognition error:", ocrError);
-        // Force worker reset on failure to prevent stuck state
-        if (worker) {
-            await worker.terminate();
-            worker = null;
-        }
-        throw ocrError;
+    if (!result || !result.data || !result.data.text) {
+        return "";
     }
+
+    return result.data.text
+        .replace(/[\r\n]+/g, " ")
+        .replace(/[^a-zA-Z0-9\s.-]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
 }
 
-// Terminate Tesseract worker and stop camera stream
+// Close OCR worker and camera
 async function closeOCR() {
     stopOcrCamera();
     if (worker) {
