@@ -35,43 +35,67 @@ function stopOcrCamera() {
     }
 }
 
-// Cutting out the frame area and preprocessing
+
 function captureCroppedFrameToCanvas() {
     const video = document.getElementById('ocrVideo');
     const canvas = document.getElementById('ocrCanvas');
-    if (!video || !canvas || !video.videoWidth) return false;
+    const overlay = document.querySelector('.scanner-overlay');
 
+    if (!video || !canvas || !overlay || !video.videoWidth) return false;
+
+    // 1. Source video stream dimensions
     const vw = video.videoWidth;
     const vh = video.videoHeight;
 
-    // Take 70% of the width and 25% of the height exactly from the center of the video stream
-    const cropWidth = Math.floor(vw * 0.7);
-    const cropHeight = Math.floor(vh * 0.25);
-    const cropX = Math.floor((vw - cropWidth) / 2);
-    const cropY = Math.floor((vh - cropHeight) / 2);
+    // 2. Displayed <video> element dimensions
+    const elemW = video.clientWidth;
+    const elemH = video.clientHeight;
 
-    canvas.width = cropWidth;
-    canvas.height = cropHeight;
+    // 3. Calculate scale factor taking object-fit: cover into account
+    const scale = Math.max(elemW / vw, elemH / vh);
+
+    // Visible area of video stream in original pixels
+    const visibleW = elemW / scale;
+    const visibleH = elemH / scale;
+
+    // Cropping offsets due to object-fit: cover
+    const offsetX = (vw - visibleW) / 2;
+    const offsetY = (vh - visibleH) / 2;
+
+    // 4. Bounding rect of overlay target frame relative to video element
+    const overlayRect = overlay.getBoundingClientRect();
+    const videoRect = video.getBoundingClientRect();
+
+    const overlayX = overlayRect.left - videoRect.left;
+    const overlayY = overlayRect.top - videoRect.top;
+
+    // 5. Precise crop coordinates inside the source video stream
+    const cropX = offsetX + (overlayX / scale);
+    const cropY = offsetY + (overlayY / scale);
+    const cropW = overlayRect.width / scale;
+    const cropH = overlayRect.height / scale;
+
+    canvas.width = cropW;
+    canvas.height = cropH;
 
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
-    //  Drawing the cut-out piece 
+    // Draw only the exact frame region onto the canvas
     ctx.drawImage(
         video,
-        cropX, cropY, cropWidth, cropHeight,
-        0, 0, cropWidth, cropHeight
+        cropX, cropY, cropW, cropH,
+        0, 0, cropW, cropH
     );
 
-    // Binary thresholding (increase contrast for better recognition)
-    const imgData = ctx.getImageData(0, 0, cropWidth, cropHeight);
+    // Preprocessing: convert to high-contrast black & white for optimal OCR recognition
+    const imgData = ctx.getImageData(0, 0, cropW, cropH);
     const d = imgData.data;
     for (let i = 0; i < d.length; i += 4) {
         const avg = (d[i] + d[i + 1] + d[i + 2]) / 3;
-        const threshold = 130; // Contrast threshold
-        const color = avg > threshold ? 255 : 0;
-        d[i] = color;     // R
-        d[i + 1] = color; // G
-        d[i + 2] = color; // B
+        const color = avg > 120 ? 255 : 0;
+        d[i] = color;
+        d[i + 1] = color;
+        d[i + 2] = color;
     }
     ctx.putImageData(imgData, 0, 0);
 
