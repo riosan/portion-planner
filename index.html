@@ -107,6 +107,7 @@
         </label>
       </div>
 
+
       <div class="section-subheading">
         <h3 data-i18n="additivesHeading">Additives per full portion</h3>
         <button id="resetAdditivesBtn" class="secondary-button compact-button" type="button"
@@ -318,8 +319,33 @@
     </div>
   </div>
 
+
+  <div id="ocrModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close-btn" id="closeOcrModalBtn">&times;</span>
+      <h2>Scan Preset Name</h2>
+
+      <div class="scanner-container">
+        <video id="ocrVideo" autoplay playsinline></video>
+        <div class="scanner-overlay"></div>
+        <canvas id="ocrCanvas" style="display: none;"></canvas>
+      </div>
+
+      <div class="scanner-controls">
+        <input type="text" id="presetNameInput" placeholder="Point the camera and click Scan">
+        <button id="ocrBtn" class="primary-btn" type="button">Scan</button>
+      </div>
+
+      <button id="confirmPresetBtn" class="secondary-btn" style="width: 100%; margin-top: 10px;" type="button">Save
+        preset</button>
+    </div>
+  </div>
+
+
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="ocr.js"></script>
   <script src="app.js"></script>
 </body>
 

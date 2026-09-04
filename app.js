@@ -149,7 +149,40 @@ const closeBtn = document.querySelector(".close-btn");
 const qrModal = document.getElementById("qrModal");
 const openQrBtn = document.getElementById("qrCode");
 
+
 document.getElementById("portionMinutes").addEventListener("input", showMinAndSec);
+
+
+document.getElementById("ocrBtn").addEventListener("click", async () => {
+  const ocrBtn = document.getElementById("ocrBtn");
+  const canvas = document.getElementById("ocrCanvas"); //Canvas with the cropped area/frame
+  const inputField = document.getElementById("ingredientNameInput");  //Field to insert the recognized text
+
+  try {
+    //Block the button and show loading status
+    ocrBtn.disabled = true;
+    ocrBtn.textContent = "Scanning...";
+
+    //Run the OCR function from ocr.js to recognize text from the canvas
+    const recognizedText = await scanCropCanvas(canvas);
+
+    // 3. Insert the result in the input field (if the text is found)
+    if (recognizedText) {
+      inputField.value = recognizedText;
+    } else {
+      alert("The text could not be recognized. Try again.");
+    }
+
+  } catch (error) {
+    console.error("OCR error:", error);
+    alert("Error during scanning");
+  } finally {
+
+    //4. Return the button to its original state
+    ocrBtn.disabled = false;
+    ocrBtn.textContent = "Scan";
+  }
+});
 
 
 
@@ -679,12 +712,18 @@ function applyPreset(id) {
   saveState();
 }
 
-function savePreset() {
-  let name = window.prompt(t("presetNamePrompt"));
 
-  if (!name?.trim()) {
+
+async function savePreset() {
+
+  const scannedName = await openOcrModalAndGetName();
+
+  if (!scannedName?.trim()) {
     return;
   }
+
+  let name = scannedName.trim();
+
 
   const d = new Date();
   name += ` ${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}_${d.getHours()}:${d.getMinutes() < 10 ? "0" : ""}${d.getMinutes()}`;
@@ -704,6 +743,68 @@ function savePreset() {
   elements.presetSelect.value = id;
   saveState();
 }
+
+
+function openOcrModalAndGetName() {
+  return new Promise((resolve) => {
+    const modal = document.getElementById("ocrModal");
+    const closeBtn = document.getElementById("closeOcrModalBtn");
+    const confirmBtn = document.getElementById("confirmPresetBtn");
+    const ocrBtn = document.getElementById("ocrBtn");
+    const inputField = document.getElementById("presetNameInput");
+    const canvas = document.getElementById("ocrCanvas");
+
+    inputField.value = "";
+    modal.style.display = "flex";
+    startOcrCamera();
+
+
+    const handleScan = async () => {
+      try {
+        ocrBtn.disabled = true;
+        ocrBtn.textContent = "...";
+
+        captureFrameToCanvas();
+        const text = await scanCropCanvas(canvas);
+
+        if (text) {
+          inputField.value = text;
+        } else {
+          alert("Couldn't recognize the text");
+        }
+      } catch (err) {
+        console.error("OCR error:", err);
+      } finally {
+        ocrBtn.disabled = false;
+        ocrBtn.textContent = "Scan";
+      }
+    };
+
+    // Accept and close
+    const handleConfirm = () => {
+      cleanup();
+      resolve(inputField.value);
+    };
+
+    const handleClose = () => {
+      cleanup();
+      resolve(null);
+    };
+
+    function cleanup() {
+      stopOcrCamera();
+      modal.style.display = "none";
+      ocrBtn.removeEventListener("click", handleScan);
+      confirmBtn.removeEventListener("click", handleConfirm);
+      closeBtn.removeEventListener("click", handleClose);
+    }
+
+    ocrBtn.addEventListener("click", handleScan);
+    confirmBtn.addEventListener("click", handleConfirm);
+    closeBtn.addEventListener("click", handleClose);
+  });
+}
+
 
 function deletePreset() {
   const id = elements.presetSelect.value;
@@ -1226,3 +1327,5 @@ function showMinAndSec() {
 }
 
 showMinAndSec();
+
+
