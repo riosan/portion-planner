@@ -933,3 +933,17 @@ body {
   max-width: 90vw;
   box-sizing: border-box;
 }
+
+
+.scanner-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 70%;
+  height: 25%;
+  transform: translate(-50%, -50%);
+  border: 2px dashed #00ff88;
+  border-radius: 6px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
