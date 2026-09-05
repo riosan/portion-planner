@@ -153,39 +153,6 @@ const openQrBtn = document.getElementById("qrCode");
 document.getElementById("portionMinutes").addEventListener("input", showMinAndSec);
 
 
-document.getElementById("ocrBtn").addEventListener("click", async () => {
-  const ocrBtn = document.getElementById("ocrBtn");
-  const canvas = document.getElementById("ocrCanvas"); //Canvas with the cropped area/frame
-  const inputField = document.getElementById("ingredientNameInput");  //Field to insert the recognized text
-
-  try {
-    //Block the button and show loading status
-    ocrBtn.disabled = true;
-    ocrBtn.textContent = "Scanning...";
-
-    //Run the OCR function from ocr.js to recognize text from the canvas
-    const recognizedText = await scanCropCanvas(canvas);
-
-    // 3. Insert the result in the input field (if the text is found)
-    if (recognizedText) {
-      inputField.value = recognizedText;
-    } else {
-      alert("The text could not be recognized. Try again.");
-    }
-
-  } catch (error) {
-    console.error("OCR error:", error);
-    alert(error);
-  } finally {
-
-    //4. Return the button to its original state
-    ocrBtn.disabled = false;
-    ocrBtn.textContent = "Scan";
-  }
-});
-
-
-
 helpBtn.addEventListener("click", () => {
   helpModal.style.display = "block";
 });
