@@ -23,7 +23,7 @@
 - **Cloud & Local Storage:** Automatic synchronization of custom presets and execution history via Supabase when signed in with Google. Falls back to browser `localStorage` if offline or signed out.
 - **Seamless Export:** One-click copying (`Copy schedule`) of the generated plan into a clean text format ready to be pasted into messaging apps.
 - **Responsive & Smart UI:** Automatically collapses the middle sections of the results table if there are more than 8 portions to keep it highly readable on mobile screens. Includes a quick `Now` button to immediately capture the current time.
-
+- **Mobile devices:**The application is fully adapted for mobile devices
 ---
 
 ## 📖 Quick User Guide
